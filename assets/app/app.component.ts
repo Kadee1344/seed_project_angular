@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Message } from './messages/message.model';
+import { MessageListComponent } from './messages/message-list.component';
 
 @Component({
   selector: 'my-app',
@@ -7,5 +7,5 @@ import { Message } from './messages/message.model';
 })
 
 export class AppComponent {
-  message: Message = new Message('A dfkgjd dlfgkjdf dfg;dfg dlgkn', 'Catty');
+
 }
