@@ -1,18 +1,22 @@
+import { Http, Response, Headers } from '@angular/http';
+import { Injectable } from '@angular/core';
 import { Message } from './message.model';
+import 'rxjs/Rx';
+import { Observable } from 'rxjs';
 
+@Injectable()
 export class MessageService {
-  private messages: Message[] = [
-    new Message('Language is the dress of thought', 'Catty'),
-    new Message('While I’m breathing — I love and believe.', 'Lu'),
-    new Message('Fools grow without watering', 'Den'),
-    new Message('Illusion is the first of all pleasures.', 'Marty'),
-    new Message('Be careful with your thoughts – they are the beginning of deeds.', 'Rick'),
-    new Message('I reject your reality and substitute my own!', 'MoodCat'),
-    new Message('Those who cannot change their minds cannot change anything.', 'Catien')
-  ];
+  private messages: Message[] = [];
+
+  constructor(private http: Http) {}
 
   addMessage(message: Message) {
     this.messages.push(message);
+    const body = JSON.stringify(message);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    return this.http.post('http://localhost:3000/message', body, { headers: headers })
+                .map((response: Response) => response.json())
+                .catch((error: Response) => Observable.throw(error.json()));
   }
 
   getMessage() {
