@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class MessageService {
-  private messages: Message[] = [];
+  private messages: Message[] = [];index.ht
 
   constructor(private http: Http) {}
 
@@ -20,7 +20,17 @@ export class MessageService {
   }
 
   getMessage() {
-    return this.messages;
+    return this.http.get('http://localhost:3000/message')
+      .map((response: Response) => {
+        const messages = response.json().obj;
+        let transformedMessages: Message[] = [];
+        for (let message of messages) {
+          transformedMessages.push(new Message(message.content, message.id, 'Dummy', null));
+        }
+        this.messages = transformedMessages;
+        return transformedMessages;
+      })
+      .catch((error: Response) => Observable.throw(error.json()));
   }
 
   deleteMessage(message: Message) {
